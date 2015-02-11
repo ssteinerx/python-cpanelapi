@@ -22,11 +22,12 @@ from cpanelapi import exceptions
 class AccessHashAuth(AuthBase):
     """ Access hash authentication for requests """
 
-    def __init__(self, access_hash):
+    def __init__(self, username, access_hash):
         self.access_hash = access_hash.replace('\n', '')
+        self.username = username
 
     def __call__(self, r):
-        r.headers['Authorization'] = 'WHM root:%s' % self.access_hash
+        r.headers['Authorization'] = 'WHM %s:%s' % (self.username, self.access_hash)
         return r
 
 
@@ -49,7 +50,7 @@ class Client(object):
         elif (password and access_hash) or (cpanel and access_hash):
             raise exceptions.InvalidCredentials()
         elif access_hash:
-            self.auth = AccessHashAuth(access_hash)
+            self.auth = AccessHashAuth(username, access_hash)
         elif password:
             self.auth = (username, password)
 
