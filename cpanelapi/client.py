@@ -14,9 +14,8 @@
 #    under the License.
 
 import requests
-from requests.auth import AuthBase
-
 from cpanelapi import exceptions
+from requests.auth import AuthBase
 
 
 class AccessHashAuth(AuthBase):
